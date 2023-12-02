@@ -23,7 +23,7 @@ import os
 
 option = st.sidebar.selectbox(
     'Select AI',
-    ('OpenAI', 'PaLM', 'Hugging Face' ,'Local LLM'))
+    ('OpenAI', 'PaLM', 'Hugging Face'))
 if option == 'OpenAI':
     openai_key = st.sidebar.text_input('Insert an OpenAI API key: ')    
     if not (openai_key):
