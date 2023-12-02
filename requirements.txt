@@ -12,5 +12,4 @@ google.generativeai
 # Hugging Face
 hugchat
 # Nota: anche per 'hugchat', specificare una versione se necessario
-base64
 
