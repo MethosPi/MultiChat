@@ -21,6 +21,9 @@ from hugchat.login import Login
 import openai
 import os
 
+
+
+
 option = st.sidebar.selectbox(
     'Select AI',
     ('OpenAI', 'PaLM', 'Hugging Face'))
@@ -35,6 +38,36 @@ if option == 'OpenAI':
     else:
         st.sidebar.success('Proceed to entering your prompt message!', icon='👉')
         llm = OpenAI(openai_api_key=openai_key)
+
+        def analyze_image_with_gpt4(image_data):
+        chat = ChatOpenAI(temperature=0, openai_api_key=openai_key, model="gpt-4-vision-preview", max_tokens=256)
+    
+        output = chat.invoke(
+            [
+                HumanMessage(
+                    content=[
+                        {"type": "text", "text": "Describe this image"},
+                        {"type": "image_url", "image_url": image_data}
+                    ]
+                )
+            ]
+        )
+        return output
+
+        uploaded_files = st.sidebar.file_uploader("Upload images", type=['png', 'jpg', 'jpeg'], accept_multiple_files=True)
+    
+        if uploaded_files:
+            for uploaded_file in uploaded_files:
+                # Convert the uploaded image to base64 for analysis
+                base64_image = base64.b64encode(uploaded_file.getvalue()).decode('utf-8')
+                image_data = f"data:image/png;base64,{base64_image}"
+    
+    
+                # Analyze the image with GPT-4 Vision
+                if st.sidebar.button(f"Analyze Image {uploaded_file.name}"):
+                    result = analyze_image_with_gpt4(image_data)
+                    st.chat_message("DeltaPi AI").write(result)
+
     
         # Optionally, specify your own session_state key for storing messages
         msgs = StreamlitChatMessageHistory(key="special_app_key")
