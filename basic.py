@@ -41,19 +41,19 @@ if option == 'OpenAI':
         llm = OpenAI(openai_api_key=openai_key)
 
         def analyze_image_with_gpt4(image_data):
-        chat = ChatOpenAI(temperature=0, openai_api_key=openai_key, model="gpt-4-vision-preview", max_tokens=256)
-    
-        output = chat.invoke(
-            [
-                HumanMessage(
-                    content=[
-                        {"type": "text", "text": "Describe this image"},
-                        {"type": "image_url", "image_url": image_data}
-                    ]
-                )
-            ]
-        )
-        return output
+            chat = ChatOpenAI(temperature=0, openai_api_key=openai_key, model="gpt-4-vision-preview", max_tokens=256)
+        
+            output = chat.invoke(
+                [
+                    HumanMessage(
+                        content=[
+                            {"type": "text", "text": "Describe this image"},
+                            {"type": "image_url", "image_url": image_data}
+                        ]
+                    )
+                ]
+            )
+            return output
 
         uploaded_files = st.sidebar.file_uploader("Upload images", type=['png', 'jpg', 'jpeg'], accept_multiple_files=True)
     
