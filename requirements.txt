@@ -13,5 +13,4 @@ google.generativeai
 hugchat
 # Nota: anche per 'hugchat', specificare una versione se necessario
 
-# Dipendenze Generali
-os
+
