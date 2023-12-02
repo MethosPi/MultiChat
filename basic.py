@@ -167,32 +167,3 @@ if option == 'Hugging Face':
                 st.write(response) 
         message = {"role": "assistant", "content": response}
         st.session_state.messages.append(message)
-
-if option == "Local LLM":
-    # App title
-    
-
-    openai.api_base =  st.sidebar.text_input('Insert a Local LLM API base: ')
-    openai.api_key = "Suca" # no need for an API key
-
-    if not (openai.api_base):
-        st.sidebar.error('Please enter your Local LLM API base!', icon='⚠️')
-        st.title("DeltaPi Chatbot")
-        st.subheader("Your AI-Powered Conversation Companion!")
-        st.write("Welcome to DeltaPi Chatbot, your new AI companion that's here to listen, engage, and assist. Combining cutting-edge AI technologies from OpenAI, PaLM, and Hugging Face, DeltaPi offers a unique chatting experience that's both informative and friendly. Whether you have questions, need advice, or just want to explore the world of AI, DeltaPi is ready for a warm and engaging conversation. Choose your preferred AI platform and start a delightful journey of interaction and discovery. DeltaPi is more than a chatbot - it's a friend in the realm of AI, always here to chat and learn with you.")
-
-    else:
-        st.sidebar.success('Proceed to entering your prompt message!', icon='👉')
-
-        st.title("DeltaPi Chatbot")
-        prompt = st.chat_input('Ask something: ')
-
-        completion = openai.ChatCompletion.create(
-        model="local-model", # this field is currently unused
-        messages=[
-            {"role": "user", "content": prompt}
-        ]
-        )
-
-        st.chat_message("Human").write(prompt)
-        st.chat_message("DeltaPi AI").write(completion.choices[0].message)
