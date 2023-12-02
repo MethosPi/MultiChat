@@ -1,10 +1,13 @@
 
 import streamlit as st
+import openai
+import base64
 
 #OpenAI
 from langchain.memory import ConversationBufferMemory
 from langchain.memory.chat_message_histories import StreamlitChatMessageHistory
 from langchain.chains import LLMChain
+from langchain.chat_models import ChatOpenAI
 from langchain.llms import OpenAI
 from langchain.prompts import PromptTemplate
 
@@ -17,9 +20,7 @@ from langchain.llms import GooglePalm
 from hugchat import hugchat
 from hugchat.login import Login
 
-#Local LLM
-import openai
-import os
+#
 
 
 
