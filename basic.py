@@ -19,6 +19,7 @@ from hugchat.login import Login
 
 #Local LLM
 import openai
+import os
 
 option = st.sidebar.selectbox(
     'Select AI',
