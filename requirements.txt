@@ -1,0 +1,17 @@
+# Streamlit
+streamlit
+
+# OpenAI
+openai==0.28.1
+langchain
+
+# PaLM (Google)
+google.generativeai
+# Nota: potrebbe essere necessario specificare una versione specifica per 'google.generativeai', se disponibile
+
+# Hugging Face
+hugchat
+# Nota: anche per 'hugchat', specificare una versione se necessario
+
+# Dipendenze Generali
+os
