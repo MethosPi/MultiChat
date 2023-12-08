@@ -100,7 +100,7 @@ if option == 'OpenAI':
                                         st.write(f'File {i+1} {uploaded_file.name}:')
                                         df = SmartDataframe(df, {"llm": llm, "conversational": False})
                                         with get_openai_callback() as cb:
-                                            response = df.prompt
+                                            response = df.chat(prompt)
                                             if 'Plot' in prompt or 'chart' in prompt:
                                                 plt.title(f'Chart {i+1} {uploaded_file.name}')
                                                 st.pyplot(plt)
@@ -129,7 +129,7 @@ if option == 'OpenAI':
                             if st.button(f'Prompt {uploaded_file.name}', key=f'promptcsv_button_{i}'):
                                 df = SmartDataframe(df, {"llm": llm, "conversational": False})
                                 with get_openai_callback() as cb:
-                                    response = df.prompt
+                                    response = df.chat(prompt)
                                     if 'Plot' in prompt:
                                         # Plot the data
                                         plt.title('Chart')     
@@ -172,7 +172,7 @@ if option == 'OpenAI':
                         if st.button(f'Prompt {uploaded_file.name}', key='promptxlsx_button_(2)'):
                             df = SmartDataframe(df, {"llm": llm, "conversational": False})
                             with get_openai_callback() as cb:
-                                response = df.prompt
+                                response = df.chat(prompt)
                                 if 'Plot' in prompt:
                                     # Plot the data
                                     plt.title('Chart')     
