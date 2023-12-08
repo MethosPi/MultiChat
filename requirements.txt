@@ -13,3 +13,6 @@ google.generativeai
 hugchat
 # Nota: anche per 'hugchat', specificare una versione se necessario
 
+#Autogen
+asyncio
+autogen
