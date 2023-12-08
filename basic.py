@@ -43,7 +43,7 @@ if option == 'OpenAI':
 
 
 
-        uploaded_files = st.sidebar.file_uploader("Upload images", type=['png', 'jpg', 'jpeg'], accept_multiple_files=True)
+        uploaded_files = st.sidebar.file_uploader("Upload files", accept_multiple_files=True)
 
     
         # Optionally, specify your own session_state key for storing messages
@@ -69,12 +69,32 @@ if option == 'OpenAI':
         for msg in msgs.messages:
             st.chat_message(msg.type).write(msg.content)
 
-        if prompt := st.chat_input("Ask to the DeltaPi: "):
-            st.chat_message("user").write(prompt)
+        if st.sidebar.toggle("Code Interpreter"):
+            os.environ["OPENAI_API_KEY"] = openai_key
+            assistant = OpenAIAssistantRunnable.create_assistant(
+                name="Code Interpreter Assistant", 
+                instructions=st.sidebar.text_area("Agent instructions: "),
+                tools=[{"type": "code_interpreter"}],
+                model="gpt-4-1106-preview"
+            )
+            if prompt := st.chat_input("Ask to the DeltaPi Code Interpreter: "):
+                response = llm_chain.run(prompt)
+                output = assistant.invoke({"content": "Prompt:"+ prompt + "Write, execute and finally explain the respose:" + response})
+                st.chat_message("user").write(prompt)
+                for message in output:
+                    # Iterate over the content list
+                    for content_item in message.content:
+                        # Check if the content item is of type 'text'
+                        if content_item.type == 'text':
+                            st.chat_message("DeltaPi AI").write(content_item.text.value)
 
-            # As usual, new messages are added to StreamlitChatMessageHistory when the Chain is called.
-            response = llm_chain.run(prompt)
-            st.chat_message("DeltaPi AI").write(response)
+
+
+        else:
+            if prompt := st.chat_input("Ask to the DeltaPi: "):
+                st.chat_message("user").write(prompt)
+                response = llm_chain.run(prompt)
+                st.chat_message("DeltaPi AI").write(response)
             
         if uploaded_files:
 
