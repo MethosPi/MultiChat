@@ -21,4 +21,3 @@ autogen
 pandas
 matplotlib
 pandasai
-io
