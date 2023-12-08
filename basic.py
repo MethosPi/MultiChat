@@ -46,10 +46,9 @@ if option == 'OpenAI':
     libr = st.sidebar.selectbox('Select library', ('Autogen','Langchain','PandasAI (Data analysis)'))
 
     if libr == 'PandasAI (Data analysis)':
-        st.header(f'Δata{pi}')
-        st.subheader('Prompt your data')
+
         prompt = st.text_input('Type "Plot" to plot')
-        
+        sidebar = st.sidebar
         # Create a sidebar menu
         apikey = sidebar.text_input("Insert your OpenAI API key")
         sidebar.text(' ')
