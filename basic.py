@@ -161,41 +161,40 @@ if option == 'OpenAI':
                                     st.write(f'Possible incorrect delimiter, please verify the delimiter in the "Show first 10 rows" section or insert either ";" or "|".')
                                 else:
                                     st.write(delimiter)
-                
-                #excel
-                elif uploaded_file.name.endswith('.xlsx'):
-                    df = pd.read_excel(uploaded_file)
-                    dataframes.append(df)
-                    if st.button(f'Prompt {uploaded_file.name}', key='promptxlsx_button_(2)'):
-                        response = pandas_ai.run(dataframes[-1], prompt=prompt)
-                        if 'Plot' in prompt:
-                            # Plot the data
-                            plt.title('Chart')     
-                            # Display the plot
-                            st.pyplot(plt)
-                        elif 'chart' in prompt:
-                            # Plot the data
-                            plt.title('Plot')     
-                            # Display the plot
-                            st.pyplot(plt)
-                        else:
-                            st.write(response) 
-                    #Buttons
-                    if st.button('Show first 10 rows', key='10rxlsx_button'):
-                        st.write('First 10 rows:')
-                        st.write(df.head(10))
-                    
-                    if st.button('Describe', key='describexlsx_button'):
-                        st.write('Description:')
-                        st.write(df.describe())
-    
-                    if st.button('Show number of rows and columns', key='numberxlsx_button'):
-                        st.write(f'Rows: {df.shape[0]}')
-                        st.write(f'Columns: {df.shape[1]}')
-    
-                    if st.button('Duplicates rows', key='duplicatesxlsx_button'):
-                        duplicates = df.duplicated().sum()
-                        st.write(f'Duplicate rows: {duplicates}')
+                    #excel
+                    elif uploaded_file.name.endswith('.xlsx'):
+                        df = pd.read_excel(uploaded_file)
+                        dataframes.append(df)
+                        if st.button(f'Prompt {uploaded_file.name}', key='promptxlsx_button_(2)'):
+                            response = pandas_ai.run(dataframes[-1], prompt=prompt)
+                            if 'Plot' in prompt:
+                                # Plot the data
+                                plt.title('Chart')     
+                                # Display the plot
+                                st.pyplot(plt)
+                            elif 'chart' in prompt:
+                                # Plot the data
+                                plt.title('Plot')     
+                                # Display the plot
+                                st.pyplot(plt)
+                            else:
+                                st.write(response) 
+                        #Buttons
+                        if st.button('Show first 10 rows', key='10rxlsx_button'):
+                            st.write('First 10 rows:')
+                            st.write(df.head(10))
+                        
+                        if st.button('Describe', key='describexlsx_button'):
+                            st.write('Description:')
+                            st.write(df.describe())
+        
+                        if st.button('Show number of rows and columns', key='numberxlsx_button'):
+                            st.write(f'Rows: {df.shape[0]}')
+                            st.write(f'Columns: {df.shape[1]}')
+        
+                        if st.button('Duplicates rows', key='duplicatesxlsx_button'):
+                            duplicates = df.duplicated().sum()
+                            st.write(f'Duplicate rows: {duplicates}')
 
     elif libr == 'Autogen':
 
