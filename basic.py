@@ -66,11 +66,10 @@ if option == 'OpenAI':
         delimiter = delimiter_input
         dataframes = []
         
-        OPENAI_API_KEY = apikey
-        openai.api_key = apikey
+
         
         llm = OpenAI(api_token=apikey)
-        
+
         
         if uploaded_files:  # Controlla se ci sono file caricati
             columns = st.columns(len(uploaded_files))
