@@ -42,7 +42,7 @@ option = st.sidebar.selectbox(
     'Select AI',
     ('OpenAI', 'PaLM (coming soon)', 'Hugging Face'))
 if option == 'OpenAI': 
-    libr = st.sidebar.selectbox('Select library', ('Autogen','Langchain'))
+    libr = st.sidebar.selectbox('Select library', ('Autogen','Langchain','PandasAI (Data analysis)'))
 
     if libr == 'PandasAI (Data analysis)':
         st.header(f'Δata{pi}')
