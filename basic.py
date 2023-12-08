@@ -30,6 +30,7 @@ import autogen
 #PandasAI
 import pandas as pd
 import matplotlib.pyplot as plt
+import pandasai
 from pandasai import PandasAI
 from pandasai.llm.openai import OpenAI
 import openai
