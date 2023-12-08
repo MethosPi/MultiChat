@@ -16,3 +16,10 @@ hugchat
 #Autogen
 asyncio
 autogen
+
+#PandasAI
+pandas
+matplotlib
+pandasai
+csv
+io
