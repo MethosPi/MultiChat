@@ -21,3 +21,4 @@ autogen
 pandas
 matplotlib
 pandasai
+openpyxl
