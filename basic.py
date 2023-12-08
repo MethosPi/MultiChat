@@ -11,6 +11,7 @@ from langchain.chat_models import ChatOpenAI
 from langchain.schema.messages import HumanMessage
 from langchain.llms import OpenAI
 from langchain.prompts import PromptTemplate
+from langchain.agents.openai_assistant import OpenAIAssistantRunnable
 
 #PaLM
 import google.generativeai as palm
