@@ -21,5 +21,4 @@ autogen
 pandas
 matplotlib
 pandasai
-csv
 io
