@@ -25,7 +25,6 @@ from hugchat.login import Login
 #Autogen
 import asyncio
 import autogen
-from autogen import Agent
 from autogen import ConversableAgent
 
 
