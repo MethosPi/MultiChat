@@ -326,7 +326,7 @@ if option == 'OpenAI':
     
     
     
-            uploaded_files = st.sidebar.file_uploader("Upload files", accept_multiple_files=True)
+            uploaded_files = st.sidebar.file_uploader("Upload Images", accept_multiple_files=True)
     
         
             # Optionally, specify your own session_state key for storing messages
