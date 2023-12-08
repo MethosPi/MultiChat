@@ -30,9 +30,8 @@ import autogen
 #PandasAI
 import pandas as pd
 import matplotlib.pyplot as plt
-import pandasai
-from pandasai import PandasAI
-from pandasai.llm.openai import OpenAI
+from pandasai import SmartDataframe
+from pandasai.llm import OpenAI
 import openai
 import csv
 import io
@@ -71,9 +70,10 @@ if option == 'OpenAI':
         openai.api_key = apikey
         
         llm = OpenAI(api_token=apikey)
-        pandas_ai = PandasAI(llm)
+        
         
         if uploaded_files:  # Controlla se ci sono file caricati
+            pandas_ai = SmartDataframe(uploaded_files, config={"llm": llm})
             columns = st.columns(len(uploaded_files))
             if len(uploaded_files) > 1:
                 # Controlla se ci sono più di un file caricato
