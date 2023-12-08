@@ -72,7 +72,6 @@ if option == 'OpenAI':
         
         
         if uploaded_files:  # Controlla se ci sono file caricati
-            pandas_ai = SmartDataframe(uploaded_files, config={"llm": llm})
             columns = st.columns(len(uploaded_files))
             if len(uploaded_files) > 1:
                 # Controlla se ci sono più di un file caricato
@@ -98,13 +97,15 @@ if option == 'OpenAI':
         
                                     for i, df in enumerate(dataframes):
                                         st.write(f'File {i+1} {uploaded_file.name}:')
-                                        response = pandas_ai.run(df, prompt=prompt)
-                                        if 'Plot' in prompt or 'chart' in prompt:
-                                            plt.title(f'Chart {i+1} {uploaded_file.name}')
-                                            st.pyplot(plt)
-                                        else:
-                                            st.write(response)
-                                            st.write('---')   # Separatore tra i risultati dei prompt  # Separatore tra i risultati dei prompt
+                                        df = SmartDataframe("data.csv", {"llm": llm, "conversational": False})
+                                        with get_openai_callback() as cb:
+                                            response = df.prompt
+                                            if 'Plot' in prompt or 'chart' in prompt:
+                                                plt.title(f'Chart {i+1} {uploaded_file.name}')
+                                                st.pyplot(plt)
+                                            else:
+                                                st.write(response)
+                                                st.write('---')   # Separatore tra i risultati dei prompt  # Separatore tra i risultati dei prompt
             for i, uploaded_file in enumerate(uploaded_files):       
                 with columns[i]:
                     if uploaded_file.name.endswith('.csv'):
@@ -125,20 +126,22 @@ if option == 'OpenAI':
                         else:
                             dataframes.append(df)
                             if st.button(f'Prompt {uploaded_file.name}', key=f'promptcsv_button_{i}'):
-                                response = pandas_ai.run(dataframes[-1], prompt=prompt)
-                                if 'Plot' in prompt:
-                                    # Plot the data
-                                    plt.title('Chart')     
-                                    # Display the plot
-                                    st.pyplot(plt)
-                                elif 'chart' in prompt:
-                                    # Plot the data
-                                    plt.title('Plot')     
-                                    # Display the plot
-                                    st.pyplot(plt)
-                                else:
-                                    st.write(response)
-                                # Buttons
+                                df = SmartDataframe("data.csv", {"llm": llm, "conversational": False})
+                                with get_openai_callback() as cb:
+                                    response = df.prompt
+                                    if 'Plot' in prompt:
+                                        # Plot the data
+                                        plt.title('Chart')     
+                                        # Display the plot
+                                        st.pyplot(plt)
+                                    elif 'chart' in prompt:
+                                        # Plot the data
+                                        plt.title('Plot')     
+                                        # Display the plot
+                                        st.pyplot(plt)
+                                    else:
+                                        st.write(response)
+                                    # Buttons
         
                             if st.button('Show first 10 rows', key=f'10rcsv_button_{i}'):
                                 st.write('First 10 rows:')
@@ -166,19 +169,21 @@ if option == 'OpenAI':
                         df = pd.read_excel(uploaded_file)
                         dataframes.append(df)
                         if st.button(f'Prompt {uploaded_file.name}', key='promptxlsx_button_(2)'):
-                            response = pandas_ai.run(dataframes[-1], prompt=prompt)
-                            if 'Plot' in prompt:
-                                # Plot the data
-                                plt.title('Chart')     
-                                # Display the plot
-                                st.pyplot(plt)
-                            elif 'chart' in prompt:
-                                # Plot the data
-                                plt.title('Plot')     
-                                # Display the plot
-                                st.pyplot(plt)
-                            else:
-                                st.write(response) 
+                            df = SmartDataframe("data.csv", {"llm": llm, "conversational": False})
+                            with get_openai_callback() as cb:
+                                response = df.prompt
+                                if 'Plot' in prompt:
+                                    # Plot the data
+                                    plt.title('Chart')     
+                                    # Display the plot
+                                    st.pyplot(plt)
+                                elif 'chart' in prompt:
+                                    # Plot the data
+                                    plt.title('Plot')     
+                                    # Display the plot
+                                    st.pyplot(plt)
+                                else:
+                                    st.write(response) 
                         #Buttons
                         if st.button('Show first 10 rows', key='10rxlsx_button'):
                             st.write('First 10 rows:')
