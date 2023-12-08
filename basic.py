@@ -25,8 +25,6 @@ from hugchat.login import Login
 #Autogen
 import asyncio
 import autogen
-from autogen import ConversableAgent
-
 
 
 option = st.sidebar.selectbox(
@@ -40,115 +38,115 @@ if option == 'OpenAI':
         st.write("# DeltaPi Chat Company")
 
 
-        class TrackableAssistantAgent(Agent):
-            def _process_received_message(self, message, sender, silent):
-                with st.chat_message(sender.name):
-                    st.markdown(message)
-                return super()._process_received_message(message, sender, silent)
+        # class TrackableAssistantAgent(Agent):
+        #     def _process_received_message(self, message, sender, silent):
+        #         with st.chat_message(sender.name):
+        #             st.markdown(message)
+        #         return super()._process_received_message(message, sender, silent)
 
-        class TrackableUserProxyAgent(ConversableAgent):
-            def _process_received_message(self, message, sender, silent):
-                with st.chat_message(sender.name):
-                    st.markdown(message)
-                return super()._process_received_message(message, sender, silent)
+        # class TrackableUserProxyAgent(ConversableAgent):
+        #     def _process_received_message(self, message, sender, silent):
+        #         with st.chat_message(sender.name):
+        #             st.markdown(message)
+        #         return super()._process_received_message(message, sender, silent)
 
-        class TrackableGPTAssistantAgent(GPTAssistantAgent):
-            def _process_received_message(self, message, sender, silent):
-                with st.chat_message(sender.name):
-                    st.markdown(message)
-                return super()._process_received_message(message, sender, silent)
+        # class TrackableGPTAssistantAgent(GPTAssistantAgent):
+        #     def _process_received_message(self, message, sender, silent):
+        #         with st.chat_message(sender.name):
+        #             st.markdown(message)
+        #         return super()._process_received_message(message, sender, silent)
 
 
-        selected_model = None
-        selected_key = None
+        # selected_model = None
+        # selected_key = None
 
         
 
-        with st.sidebar:
-            st.header("AI Configuration")
-            selected_model = st.selectbox("GPT Model", ['gpt-3.5-turbo', 'gpt-4'], index=1)
-            selected_key = st.text_input("API_Key", type="password")
-            st.sidebar.text(' ')
-            st.header("Agent Configuration")
-            assistant_GPT_name = st.text_input('Agent GPT name ')
-            assistant_GPT_inst = st.text_area('Agent GPT instructions ')
-            st.sidebar.text(' ')
-            uploaded_files = st.sidebar.file_uploader("Upload CSV files", accept_multiple_files=True)
+        # with st.sidebar:
+        #     st.header("AI Configuration")
+        #     selected_model = st.selectbox("GPT Model", ['gpt-3.5-turbo', 'gpt-4'], index=1)
+        #     selected_key = st.text_input("API_Key", type="password")
+        #     st.sidebar.text(' ')
+        #     st.header("Agent Configuration")
+        #     assistant_GPT_name = st.text_input('Agent GPT name ')
+        #     assistant_GPT_inst = st.text_area('Agent GPT instructions ')
+        #     st.sidebar.text(' ')
+        #     uploaded_files = st.sidebar.file_uploader("Upload CSV files", accept_multiple_files=True)
 
 
 
-        with st.container():
-            #for message in st.session_state["messages"]:
-            #   st.markdown(message)
+        # with st.container():
+        #     #for message in st.session_state["messages"]:
+        #     #   st.markdown(message)
 
-            user_input = st.chat_input("Task:")
-            st.warning("Hello and welcome to DeltaPi Chat! 🌟 Need help? Just ask and let's make magic happen! 🚀")
-            # Create an event loop
-            if user_input:  
-                if not selected_key or not selected_model:
-                    st.warning(
-                        'You must provide valid OpenAI API key and choose preferred model', icon="⚠️")
-                    st.stop()
+        #     user_input = st.chat_input("Task:")
+        #     st.warning("Hello and welcome to DeltaPi Chat! 🌟 Need help? Just ask and let's make magic happen! 🚀")
+        #     # Create an event loop
+        #     if user_input:  
+        #         if not selected_key or not selected_model:
+        #             st.warning(
+        #                 'You must provide valid OpenAI API key and choose preferred model', icon="⚠️")
+        #             st.stop()
 
-            llm_config = {
-                "config_list": [
-                    {
-                        "model": selected_model,
-                        "api_key": selected_key
-                    }
-                ]
-            }
+        #     llm_config = {
+        #         "config_list": [
+        #             {
+        #                 "model": selected_model,
+        #                 "api_key": selected_key
+        #             }
+        #         ]
+        #     }
 
             
 
-        # The user agent
-        user_proxy = TrackableUserProxyAgent(
-            name="DeltaPi_User",
-            system_message="A human user of DeltaPi app.",
-            code_execution_config={
-                "work_dir": "chat"
-            },
-            max_consecutive_auto_reply=5,
-            is_termination_msg=lambda x: x.get("content", "").rstrip().endswith("TERMINATE"),
-            human_input_mode="NEVER"
-        )
+        # # The user agent
+        # user_proxy = TrackableUserProxyAgent(
+        #     name="DeltaPi_User",
+        #     system_message="A human user of DeltaPi app.",
+        #     code_execution_config={
+        #         "work_dir": "chat"
+        #     },
+        #     max_consecutive_auto_reply=5,
+        #     is_termination_msg=lambda x: x.get("content", "").rstrip().endswith("TERMINATE"),
+        #     human_input_mode="NEVER"
+        # )
 
 
-        # The agent playing the role of the product manager (PM)
-        gpt_assistant = TrackableGPTAssistantAgent(
-            name=assistant_GPT_name,
-            instructions=assistant_GPT_inst,
-            llm_config={
-                "config_list":  [
-                        {
-                            "model": selected_model,
-                            "api_key": selected_key
-                        }
-                    ],
-                "assistant_id": None,
-                "tools": [
-                    {
-                        "type": "code_interpreter"
-                    }
-                ],
-            })
+        # # The agent playing the role of the product manager (PM)
+        # gpt_assistant = TrackableGPTAssistantAgent(
+        #     name=assistant_GPT_name,
+        #     instructions=assistant_GPT_inst,
+        #     llm_config={
+        #         "config_list":  [
+        #                 {
+        #                     "model": selected_model,
+        #                     "api_key": selected_key
+        #                 }
+        #             ],
+        #         "assistant_id": None,
+        #         "tools": [
+        #             {
+        #                 "type": "code_interpreter"
+        #             }
+        #         ],
+        #     })
 
 
 
-        # Create an event loop
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
+        # # Create an event loop
+        # loop = asyncio.new_event_loop()
+        # asyncio.set_event_loop(loop)
 
 
-        if user_input:
-            async def initiate_chat():
-                await user_proxy.a_initiate_chat(
-                    gpt_assistant,
-                    message=user_input,
-                )
+        # if user_input:
+        #     async def initiate_chat():
+        #         await user_proxy.a_initiate_chat(
+        #             gpt_assistant,
+        #             message=user_input,
+        #         )
 
-            # Run the asynchronous function within the event loop
-            loop.run_until_complete(initiate_chat())
+        #     # Run the asynchronous function within the event loop
+        #     loop.run_until_complete(initiate_chat())
 
     elif libr == 'Langchain':
         openai_key = st.sidebar.text_input('Insert an OpenAI API key: ')    
