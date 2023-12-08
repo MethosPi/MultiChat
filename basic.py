@@ -193,7 +193,6 @@ if option == 'OpenAI':
                 os.environ["OPENAI_API_KEY"] = openai_key
                 assistant = OpenAIAssistantRunnable.create_assistant(
                     name="Code Interpreter Assistant", 
-                    instructions=st.sidebar.text_area("Agent instructions: "),
                     tools=[{"type": "code_interpreter"}],
                     model="gpt-4-1106-preview"
                 )
