@@ -2,6 +2,7 @@
 import streamlit as st
 import openai
 import base64
+import os
 
 #OpenAI
 from langchain.memory import ConversationBufferMemory
@@ -189,7 +190,7 @@ if option == 'OpenAI':
                 st.chat_message(msg.type).write(msg.content)
     
             if st.sidebar.toggle("Code Interpreter"):
-                # os.environ["OPENAI_API_KEY"] = openai_key
+                os.environ["OPENAI_API_KEY"] = openai_key
                 assistant = OpenAIAssistantRunnable.create_assistant(
                     name="Code Interpreter Assistant", 
                     instructions=st.sidebar.text_area("Agent instructions: "),
