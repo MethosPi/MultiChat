@@ -51,17 +51,14 @@ if option == 'OpenAI':
         prompt = st.text_input('Type "Plot" to plot')
         
         # Create a sidebar menu
-        sidebar = st.sidebar
-        sidebar.header(f'{delta}{pi} DataPi')
-        sidebar.header('Menu')
+        apikey = sidebar.text_input("Insert your OpenAI API key")
+        sidebar.text(' ')
         sidebar.text(' ')
         sidebar.text('Supported file types:')
         sidebar.text('CSV | EXCEL')
         uploaded_files = sidebar.file_uploader("Upload files", accept_multiple_files=True)
         sidebar.text(' ')
-        apikey = sidebar.text_input("Insert your OpenAI API key")
-        sidebar.text(' ')
-        sidebar.text(' ')
+
         delimiter_input = sidebar.text_input("CSV delimiter", max_chars=1)
         delimiter = delimiter_input
         dataframes = []
