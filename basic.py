@@ -98,7 +98,7 @@ if option == 'OpenAI':
         
                                     for i, df in enumerate(dataframes):
                                         st.write(f'File {i+1} {uploaded_file.name}:')
-                                        df = SmartDataframe(uploaded_file, {"llm": llm, "conversational": False})
+                                        df = SmartDataframe(df, {"llm": llm, "conversational": False})
                                         with get_openai_callback() as cb:
                                             response = df.prompt
                                             if 'Plot' in prompt or 'chart' in prompt:
@@ -127,7 +127,7 @@ if option == 'OpenAI':
                         else:
                             dataframes.append(df)
                             if st.button(f'Prompt {uploaded_file.name}', key=f'promptcsv_button_{i}'):
-                                df = SmartDataframe(uploaded_file, {"llm": llm, "conversational": False})
+                                df = SmartDataframe(df, {"llm": llm, "conversational": False})
                                 with get_openai_callback() as cb:
                                     response = df.prompt
                                     if 'Plot' in prompt:
@@ -170,7 +170,7 @@ if option == 'OpenAI':
                         df = pd.read_excel(uploaded_file)
                         dataframes.append(df)
                         if st.button(f'Prompt {uploaded_file.name}', key='promptxlsx_button_(2)'):
-                            df = SmartDataframe(uploaded_file, {"llm": llm, "conversational": False})
+                            df = SmartDataframe(df, {"llm": llm, "conversational": False})
                             with get_openai_callback() as cb:
                                 response = df.prompt
                                 if 'Plot' in prompt:
