@@ -32,6 +32,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from pandasai import SmartDataframe
 from pandasai.llm import OpenAI
+from pandasai.helpers.openai_info import get_openai_callback
 import csv
 import io
 
