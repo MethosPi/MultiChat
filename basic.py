@@ -201,116 +201,70 @@ if option == 'OpenAI':
 
         st.write("# DeltaPi Chat Company")
 
-
-        # class TrackableAssistantAgent(Agent):
-        #     def _process_received_message(self, message, sender, silent):
-        #         with st.chat_message(sender.name):
-        #             st.markdown(message)
-        #         return super()._process_received_message(message, sender, silent)
-
-        # class TrackableUserProxyAgent(ConversableAgent):
-        #     def _process_received_message(self, message, sender, silent):
-        #         with st.chat_message(sender.name):
-        #             st.markdown(message)
-        #         return super()._process_received_message(message, sender, silent)
-
-        # class TrackableGPTAssistantAgent(GPTAssistantAgent):
-        #     def _process_received_message(self, message, sender, silent):
-        #         with st.chat_message(sender.name):
-        #             st.markdown(message)
-        #         return super()._process_received_message(message, sender, silent)
-
-
-        # selected_model = None
-        # selected_key = None
-
+        os.environ["OPENAI_API_KEY"] = st.sidebar.text_input("OpenAI API Key", type="password")
         
-
-        # with st.sidebar:
-        #     st.header("AI Configuration")
-        #     selected_model = st.selectbox("GPT Model", ['gpt-3.5-turbo', 'gpt-4'], index=1)
-        #     selected_key = st.text_input("API_Key", type="password")
-        #     st.sidebar.text(' ')
-        #     st.header("Agent Configuration")
-        #     assistant_GPT_name = st.text_input('Agent GPT name ')
-        #     assistant_GPT_inst = st.text_area('Agent GPT instructions ')
-        #     st.sidebar.text(' ')
-        #     uploaded_files = st.sidebar.file_uploader("Upload CSV files", accept_multiple_files=True)
-
-
-
-        # with st.container():
-        #     #for message in st.session_state["messages"]:
-        #     #   st.markdown(message)
-
-        #     user_input = st.chat_input("Task:")
-        #     st.warning("Hello and welcome to DeltaPi Chat! 🌟 Need help? Just ask and let's make magic happen! 🚀")
-        #     # Create an event loop
-        #     if user_input:  
-        #         if not selected_key or not selected_model:
-        #             st.warning(
-        #                 'You must provide valid OpenAI API key and choose preferred model', icon="⚠️")
-        #             st.stop()
-
-        #     llm_config = {
-        #         "config_list": [
-        #             {
-        #                 "model": selected_model,
-        #                 "api_key": selected_key
-        #             }
-        #         ]
-        #     }
-
+        if os.environ["OPENAI_API_KEY"]:
+            # Configurazione JSON come oggetto
+            config_data = [
+                {
+                  "model": "gpt-4-1106-preview"
+                }
+            ]
             
-
-        # # The user agent
-        # user_proxy = TrackableUserProxyAgent(
-        #     name="DeltaPi_User",
-        #     system_message="A human user of DeltaPi app.",
-        #     code_execution_config={
-        #         "work_dir": "chat"
-        #     },
-        #     max_consecutive_auto_reply=5,
-        #     is_termination_msg=lambda x: x.get("content", "").rstrip().endswith("TERMINATE"),
-        #     human_input_mode="NEVER"
-        # )
-
-
-        # # The agent playing the role of the product manager (PM)
-        # gpt_assistant = TrackableGPTAssistantAgent(
-        #     name=assistant_GPT_name,
-        #     instructions=assistant_GPT_inst,
-        #     llm_config={
-        #         "config_list":  [
-        #                 {
-        #                     "model": selected_model,
-        #                     "api_key": selected_key
-        #                 }
-        #             ],
-        #         "assistant_id": None,
-        #         "tools": [
-        #             {
-        #                 "type": "code_interpreter"
-        #             }
-        #         ],
-        #     })
-
-
-
-        # # Create an event loop
-        # loop = asyncio.new_event_loop()
-        # asyncio.set_event_loop(loop)
-
-
-        # if user_input:
-        #     async def initiate_chat():
-        #         await user_proxy.a_initiate_chat(
-        #             gpt_assistant,
-        #             message=user_input,
-        #         )
-
-        #     # Run the asynchronous function within the event loop
-        #     loop.run_until_complete(initiate_chat())
+            # Converti l'oggetto JSON in una stringa
+            config_str = json.dumps(config_data)
+        
+            # Creazione di un file temporaneo
+            with tempfile.NamedTemporaryFile(mode='w+', delete=False, suffix='.json') as temp_file:
+                temp_file.write(config_str)
+                config_path = temp_file.name
+        
+            default_llm_config = {'temperature': 0.75}
+        
+            # Utilizza config_path con AgentBuilder
+            config_list = autogen.config_list_from_json(config_path)
+            default_llm_config = {'temperature': 0.75}
+        
+            # 2. Initialising Builder
+            builder = AgentBuilder(config_path=config_path)
+        
+            # 3. Building agents
+            building_task = st.sidebar.text_input("Company Builder:")
+            if building_task:                 
+                        
+                agent_list, agent_configs = builder.build(building_task, default_llm_config)
+                
+                
+            
+                # 4. Multi-agent group chat
+                group_chat = autogen.GroupChat(agents=agent_list, messages=[], max_round=10)
+                manager = autogen.GroupChatManager(groupchat=group_chat, llm_config={"config_list": config_list, **default_llm_config})
+        
+                agents = agent_configs['agent_configs']
+                with st.sidebar.status("Generating Agents..."):
+                    for agent in agents:
+                        name = agent['name']
+                        system_message = agent['system_message']
+                
+                        # Stampa o visualizza i dettagli nell'interfaccia utente
+                        st.write(f"Role: {name}")
+                        st.write(f"Instructions: {system_message}")
+                        st.write("-----")
+                        
+                user_input = st.chat_input("Ask to DeltaPi Agents: ")
+        
+                if user_input:
+                    # Inizia la chat di gruppo con un messaggio dall'utente
+                    response = agent_list[0].initiate_chat(
+                        manager, 
+                        message=user_input
+                    )
+        
+        
+                    # Mostra la risposta del chatbot
+                    for messages in group_chat.messages:
+                        with st.chat_message(messages["name"]):
+                            st.markdown(messages["content"])
 
     elif libr == 'Langchain':
         openai_key = st.sidebar.text_input('Insert an OpenAI API key: ')    
