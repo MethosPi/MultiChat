@@ -24,8 +24,11 @@ from hugchat import hugchat
 from hugchat.login import Login
 
 #Autogen
-import asyncio
 import autogen
+from autogen.agentchat.contrib.agent_builder import AgentBuilder
+import os
+import json
+import tempfile
 
 #PandasAI
 import pandas as pd
