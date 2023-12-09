@@ -231,7 +231,7 @@ if option == 'OpenAI':
             builder = AgentBuilder(config_path=config_path)
         
             # 3. Building agents
-            building_task = st.sidebar.text_input("Company Builder:")
+            building_task = st.sidebar.text_area("Company Builder:")
             if building_task:                 
                 with st.sidebar.status("Generating Agents...", state="running") as status:        
                     agent_list, agent_configs = builder.build(building_task, default_llm_config)
