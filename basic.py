@@ -233,17 +233,17 @@ if option == 'OpenAI':
             # 3. Building agents
             building_task = st.sidebar.text_input("Company Builder:")
             if building_task:                 
-                        
-                agent_list, agent_configs = builder.build(building_task, default_llm_config)
+                with st.sidebar.status("Generating Agents...", state="running"):        
+                    agent_list, agent_configs = builder.build(building_task, default_llm_config)
+                    
+                    
                 
-                
+                    # 4. Multi-agent group chat
+                    group_chat = autogen.GroupChat(agents=agent_list, messages=[], max_round=10)
+                    manager = autogen.GroupChatManager(groupchat=group_chat, llm_config={"config_list": config_list, **default_llm_config})
             
-                # 4. Multi-agent group chat
-                group_chat = autogen.GroupChat(agents=agent_list, messages=[], max_round=10)
-                manager = autogen.GroupChatManager(groupchat=group_chat, llm_config={"config_list": config_list, **default_llm_config})
-        
-                agents = agent_configs['agent_configs']
-                with st.sidebar.status("Generating Agents..."):
+                    agents = agent_configs['agent_configs']
+                    status.update(label="Agents", state="complete")
                     for agent in agents:
                         name = agent['name']
                         system_message = agent['system_message']
